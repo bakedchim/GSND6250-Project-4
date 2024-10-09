@@ -42,7 +42,7 @@ public class BossTeleportation : MonoBehaviour
         float randomZ = Random.Range(-planeSize.z / 2 + boundaryMargin, planeSize.z / 2 - boundaryMargin);
 
         // Maintain the current Y position of the boss
-        Vector3 newPosition = teleportationPlane.transform.position + new Vector3(randomX, transform.position.y, randomZ);
+        Vector3 newPosition = teleportationPlane.transform.position + new Vector3(randomX, 0, randomZ);
 
         // Update the boss position
         transform.position = newPosition;

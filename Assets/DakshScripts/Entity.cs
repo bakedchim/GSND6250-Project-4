@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+
+    [SerializeField] AudioSource natureAudioSource;  // Assign the nature audio source in the inspector
+    [SerializeField] AudioSource bossBattleAudioSource;  // Assign the boss battle audio source in the inspector
     [SerializeField] private float StartingHealth;
     private float health;
 
@@ -58,6 +61,16 @@ public class Entity : MonoBehaviour
             {
                 Debug.Log("Opening Cave Entrance Slowly");
                 StartCoroutine(MoveCaveEntrance());
+                // Stop the boss battle audio source
+                if (bossBattleAudioSource != null)
+                {
+                    StartCoroutine(FadeOutMusic(bossBattleAudioSource, 3f));  // Fade out over 3 seconds
+                }
+                // Play the nature audio source
+                if (natureAudioSource != null)
+                {
+                    natureAudioSource.Play();
+                }
             }
             else
             {
@@ -72,6 +85,20 @@ public class Entity : MonoBehaviour
             Debug.LogWarning("Destruction Audio Source not assigned!");
             Destroy(gameObject, 1f);  // Immediately destroy if no destruction sound is assigned, with a 2 seconds delay
         }
+    }
+
+    private IEnumerator FadeOutMusic(AudioSource audioSource, float fadeDuration)
+    {
+        float startVolume = audioSource.volume;
+
+        while (audioSource.volume > 0)
+        {
+            audioSource.volume -= startVolume * Time.deltaTime / fadeDuration;
+            yield return null;
+        }
+
+        audioSource.Stop();
+        audioSource.volume = startVolume;
     }
 
     // Coroutine to move the cave entrance over 3 seconds
